@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>🍽️ المطعم — حجز المواعيد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&family=Reem+Kufi:wght@500;700&family=Amiri:wght@400;700&family=Changa:wght@400;600;800&family=Tajawal:wght@400;500;800&family=Lalezar&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ee;--card:#fff;--ink:#1c1b19;--mut:#76716a;--a:#c2410c;--b:#0f766e;--r:16px;--f:'Cairo',system-ui,sans-serif;--h:'Cairo',system-ui,sans-serif;--ln:color-mix(in srgb,var(--ink) 12%,transparent)}
+@media (prefers-color-scheme:dark){:root{--bg:#161513;--card:#201f1c;--ink:#f2eee8;--mut:#a39d94}}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);transition:background .6s,color .6s;min-height:100vh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--ln)}
+.top{display:flex;align-items:center;gap:12px;padding:10px 0}
+.logo{font-family:'Lalezar',var(--h);font-size:26px;color:var(--a);white-space:nowrap}
+.tabs{margin-inline-start:auto;display:flex;background:var(--card);border:1px solid var(--ln);border-radius:99px;padding:3px}
+.tabs button{padding:7px 16px;border-radius:99px;font-weight:600;font-size:14px;color:var(--mut)}
+.tabs button.on{background:var(--a);color:#fff}
+.picker{display:flex;gap:8px;overflow-x:auto;padding:0 0 12px;scrollbar-width:none}
+.picker::-webkit-scrollbar{display:none}
+.pk{flex:none;display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;background:var(--card);border:1.5px solid var(--ln);font-weight:600;font-size:14px;transition:.25s}
+.pk.on{background:var(--a);color:#fff;border-color:var(--a);transform:scale(1.05)}
+.hero{position:relative;padding:44px 0 30px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-40% -10% auto auto;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--a) 35%,transparent),transparent 70%);filter:blur(10px);transition:.8s}
+.hero::after{content:"";position:absolute;inset:auto auto -50% -10%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--b) 30%,transparent),transparent 70%);transition:.8s}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:center}
+h1{font-family:var(--h);font-size:clamp(34px,6vw,64px);line-height:1.15;font-weight:800}
+.sub{color:var(--mut);font-size:18px;margin-top:12px;max-width:34em}
+.big{font-size:min(38vw,190px);text-align:center;filter:drop-shadow(0 20px 30px color-mix(in srgb,var(--a) 40%,transparent));animation:fl 4s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-14px) rotate(-4deg)}}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.chip{background:var(--card);border:1px solid var(--ln);border-radius:99px;padding:5px 12px;font-size:13px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;padding-bottom:60px;align-items:start}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:20px;transition:background .6s}
+.sec{margin-bottom:22px}
+.sec h3{font-family:var(--h);font-size:19px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec h3 i{font-style:normal;background:var(--a);color:#fff;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.op{text-align:start;padding:12px 14px;border:1.5px solid var(--ln);border-radius:calc(var(--r) * .7);background:var(--bg);transition:.2s}
+.op b{display:block;font-size:15px}.op small{color:var(--mut)}
+.op:hover{border-color:var(--a)}
+.op.on{border-color:var(--a);background:color-mix(in srgb,var(--a) 14%,var(--card));box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 22%,transparent)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.dy{flex:none;width:62px;padding:10px 0;text-align:center;border:1.5px solid var(--ln);border-radius:calc(var(--r) * .7);background:var(--bg)}
+.dy b{display:block;font-size:20px}.dy small{color:var(--mut);font-size:12px}
+.dy.on{background:var(--a);color:#fff;border-color:var(--a)}.dy.on small{color:#fff}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px;margin-top:10px}
+.sl{padding:9px 0;border:1.5px solid var(--ln);border-radius:10px;background:var(--bg);font-weight:600;font-size:14px;direction:ltr}
+.sl.on{background:var(--b);color:#fff;border-color:var(--b)}
+.sl:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f .full{grid-column:1/-1}
+label{display:block;font-size:13px;color:var(--mut);margin-bottom:4px}
+input,textarea{width:100%;padding:11px 13px;border-radius:calc(var(--r) * .6);border:1.5px solid var(--ln);background:var(--bg)}
+input:focus,textarea:focus{outline:none;border-color:var(--a)}
+.err{border-color:#dc2626!important}
+.step{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1.5px solid var(--ln);border-radius:calc(var(--r) * .6);padding:6px}
+.step button{width:40px;height:40px;border-radius:50%;background:var(--a);color:#fff;font-size:22px}
+.step span{font-size:22px;font-weight:800}
+.go{width:100%;padding:15px;border-radius:calc(var(--r) * .8);background:linear-gradient(135deg,var(--a),var(--b));color:#fff;font-weight:800;font-size:17px;margin-top:6px;transition:transform .2s}
+.go:hover{transform:translateY(-2px)}
+.tk{position:sticky;top:calc(130px + env(safe-area-inset-top,0px));border-style:dashed;border-width:2px}
+.tk h4{font-family:var(--h);font-size:20px;margin-bottom:10px}
+.tk .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--ln);font-size:14px;gap:10px}
+.tk .row span:first-child{color:var(--mut)}
+.tot{font-size:26px;font-weight:900;color:var(--a);margin-top:10px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:24px 0 16px}
+.st{padding:16px}.st small{color:var(--mut)}.st b{display:block;font-size:32px;font-family:var(--h);color:var(--a)}
+.bars{display:flex;align-items:flex-end;gap:10px;height:130px;margin-top:10px}
+.bar{flex:1;text-align:center;font-size:12px;color:var(--mut)}
+.bar i{display:block;background:linear-gradient(var(--a),var(--b));border-radius:8px 8px 3px 3px;min-height:4px;transition:height .6s;margin-bottom:4px}
+.fl{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0}
+.fl button{padding:6px 14px;border-radius:99px;border:1.5px solid var(--ln);font-size:13px;font-weight:600}
+.fl button.on{background:var(--ink);color:var(--bg)}
+.bk{display:grid;grid-template-columns:1fr auto;gap:10px;padding:14px;margin-bottom:10px;align-items:center}
+.bk h5{font-size:16px}.bk p{color:var(--mut);font-size:13px;margin-top:2px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;margin-inline-start:6px;color:#fff}
+.s-new{background:#2563eb}.s-ok{background:#16a34a}.s-done{background:#64748b}.s-x{background:#dc2626}
+.acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.acts button,.acts a{padding:6px 11px;border-radius:8px;border:1.5px solid var(--ln);font-size:13px;text-decoration:none;color:var(--ink)}
+.empty{text-align:center;padding:40px;color:var(--mut)}
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;z-index:50;padding:16px}
+.mod.on{display:grid}
+.mod .card{max-width:400px;width:100%;text-align:center;animation:pop .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.ok{font-size:64px}.code{font-family:var(--h);font-size:30px;letter-spacing:3px;color:var(--a);margin:8px 0;direction:ltr}
+.cf{position:fixed;top:-30px;font-size:26px;z-index:60;pointer-events:none;animation:fall 2.4s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+.hide{display:none!important}
+@media(max-width:800px){.hero .wrap,.grid{grid-template-columns:1fr}.big{font-size:90px;order:-1}.tk{position:static}.hero{padding:20px 0}.bk{grid-template-columns:1fr}.acts{justify-content:flex-start}}
+.card{box-shadow:0 1px 2px rgba(0,0,0,.05),0 18px 40px -18px color-mix(in srgb,var(--a) 45%,transparent)}
+header{box-shadow:0 8px 30px -20px var(--a)}header::after{content:"";display:block;height:3px;background:linear-gradient(90deg,var(--a),var(--b),var(--a));background-size:200%;animation:gl 6s linear infinite}
+@keyframes gl{to{background-position:200%}}
+.hero::before{animation:dr 12s ease-in-out infinite alternate}.hero::after{animation:dr 15s ease-in-out infinite alternate-reverse}
+@keyframes dr{to{transform:translate(-50px,40px) scale(1.18)}}
+#sv .op{animation:up .55s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--n,0)*70ms)}
+@keyframes up{from{opacity:0;transform:translateY(18px) scale(.94)}}
+.op{box-shadow:0 2px 0 var(--ln)}.op:hover{transform:translateY(-3px);box-shadow:0 14px 24px -12px var(--a)}
+.op.on{box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 25%,transparent),0 14px 28px -12px var(--a)}
+.dy,.sl{transition:.2s}.dy:hover,.sl:hover:not(:disabled){transform:translateY(-2px);border-color:var(--a)}
+.dy.on,.sl.on{box-shadow:0 10px 20px -8px var(--a)}
+.go{position:relative;overflow:hidden;box-shadow:0 14px 30px -10px var(--a)}.go:active{transform:scale(.98)}
+.go::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.38) 50%,transparent 70%);transform:translateX(-120%);animation:sh 3.2s infinite}
+@keyframes sh{to{transform:translateX(120%)}}
+.pk{box-shadow:0 4px 12px -8px var(--a)}.pk.on{box-shadow:0 10px 20px -6px var(--a)}
+.st{transition:.25s}.st:hover{transform:translateY(-4px)}
+.mod{backdrop-filter:blur(6px)}.mod .card{box-shadow:0 30px 80px -20px var(--a)}
+.ed{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center}
+.ed.hd small{color:var(--mut)}.del{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--ln)}.del:hover{background:#dc2626}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:12px}
+input[type=color]{padding:3px;height:46px;cursor:pointer}input[type=range]{padding:0;accent-color:var(--a)}
+.note{color:var(--mut);font-size:13px;margin-top:10px}
+select{width:100%;padding:11px 13px;border-radius:10px;border:1.5px solid var(--ln);background:var(--bg);color:var(--ink);font:inherit}
+#px h3{font-family:var(--h)}
+.lgb{padding:7px 13px;border-radius:99px;border:1.5px solid var(--a);font-weight:800;font-size:13px;background:var(--card);color:var(--a);box-shadow:0 6px 14px -8px var(--a)}
+[dir=ltr] #ph{text-align:left!important}
+.hero{padding:14px 0 6px!important}.sub,.chips{display:none}h1{font-size:clamp(24px,4vw,38px)}.big{font-size:70px!important}.hero .wrap{grid-template-columns:1fr auto!important}
+@media(max-width:800px){.ed{grid-template-columns:1fr 1fr}.ed input:first-child{grid-column:1/-1}.ed.hd{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.tk{top:calc(76px + env(safe-area-inset-top,0px))}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><div class="logo">🍽️ المطعم</div>
+<div class="tabs"><button id="tb" class="on">➕ حجز جديد</button><button id="td">📊 الحجوزات والإدارة</button></div><button id="lsw" class="lgb" aria-label="Language">EN</button></div>
+<div class="picker" id="pk" style="display:none"></div>
+</div></header>
+
+<main id="vb">
+<section class="hero"><div class="wrap"><div><h1 id="ht"></h1><p class="sub" id="hs"></p><div class="chips" id="hc"></div></div><div class="big" id="he"></div></div></section>
+<div class="wrap grid">
+<div class="card">
+<div class="sec"><h3><i>1</i><span id="l1"></span></h3><div class="opts" id="sv"></div></div>
+<div class="sec hide" id="ss"><h3><i id="ns">2</i><span id="ls"></span></h3><div class="opts" id="sb"></div></div>
+<div class="sec hide" id="xs"><h3><i>2</i><span id="l2"></span></h3><div id="xb"></div></div>
+<div class="sec"><h3><i id="n3">2</i><span>اختار اليوم والميعاد</span></h3><div class="days" id="dy"></div><div style="margin-top:12px"><label for="dp">📅 عايز تاريخ أبعد؟ اختاره من التقويم</label><input type="date" id="dp" style="max-width:260px" onchange="if(this.value){S.d=this.value;S.t=null;days();slots();tick()}"></div><div class="slots" id="sl"></div></div>
+<div class="sec"><h3><i id="n4">3</i><span>بيانات العميل</span></h3>
+<div class="f"><div><label for="nm">الاسم</label><input id="nm" autocomplete="name" placeholder="اسم العميل"></div>
+<div><label for="ph">رقم الموبايل</label><input id="ph" type="tel" inputmode="tel" oninput="known()" dir="ltr" style="text-align:right" placeholder="01xxxxxxxxx"></div>
+<div class="full note" id="ph2" style="margin:0"></div><div class="full"><label for="nt">ملاحظات (اختياري)</label><textarea id="nt" rows="2" placeholder="أي تفصيلة عايزنا نعرفها"></textarea></div></div></div>
+<button class="go" id="go">تأكيد الحجز</button>
+</div>
+<aside class="card tk"><h4 id="th"></h4><div id="tr"></div><div class="tot" id="tt"></div></aside>
+</div>
+</main>
+
+<main id="vd" class="hide"><div class="wrap" style="padding-bottom:60px">
+<h2 id="dh" style="font-family:var(--h);margin-top:24px"></h2>
+<div class="fl" id="dn"></div><div id="px" class="hide"></div><div id="pbk">
+<div class="stats" id="ds"></div>
+<div class="card"><b>الحجوزات آخر ٧ أيام قدام</b><div class="bars" id="db"></div></div>
+<input id="sq" oninput="dash()" placeholder="🔍 دوّر بالاسم أو رقم الموبايل" style="margin-top:16px"><div class="fl" id="df"></div>
+<div id="dl"></div>
+<div class="acts" style="margin-top:14px"><button id="ex">⬇ تصدير CSV</button><button id="rs">🗑 مسح الحجوزات</button></div></div>
+</div></main>
+
+<div class="mod" id="lg"><div class="card"><div class="ok">🔐</div><h3 style="font-family:var(--h)">دخول الإدارة</h3><input id="pw" type="password" placeholder="كلمة السر" style="margin:14px 0 6px" autocomplete="current-password"><p id="pe" style="color:#dc2626;min-height:22px;font-size:14px"></p><div class="acts" style="justify-content:center"><button id="lo">دخول</button><button id="lc">إلغاء</button></div></div></div>
+<div class="mod" id="md"><div class="card"><div class="ok">🎉</div><h3 style="font-family:var(--h)">تم الحجز بنجاح</h3><div class="code" id="cd"></div><p id="mt" style="color:var(--mut);line-height:1.8"></p><div class="acts" style="justify-content:center;margin-top:14px"><a id="wa" target="_blank" rel="noopener">📲 ابعت تأكيد للعميل</a><button id="mc">تمام</button></div></div></div>
+
+<script>
+const T={
+barber:{n:'الحلاقة',e:'💈',t:'قصّة تليق بيك',s:'احجز كرسيك قبل الزحمة. حلاقين شاطرين وموس نضيف.',bg:'#0e0e11',c:'#1a1a1f',i:'#f4ecde',m:'#9c9588',a:'#d4a24c',b:'#9b2335',f:"'Cairo'",h:"'Reem Kufi'",r:'4px',hr:[10,23],st:30,who:'عميل',l1:'اختار الخدمة',sv:[['قصّة شعر',150,30],['دقن وتحديد',100,20],['قصّة + دقن',230,45],['حلاقة ملكية بالفوطة الساخنة',320,60],['تنظيف بشرة',180,30]],ch:['منشفة ساخنة','حلاقين محترفين','حجز في دقيقة'],sl:'الحلاق',stf:[['أسطى مصطفى',''],['حسام',''],['كابتن رامي','']]},
+clinic:{n:'العيادة',e:'🩺',t:'صحتك أولاً، وميعادك مضبوط',s:'اختار التخصص والميعاد المناسب وتعالى من غير انتظار.',bg:'#eef8fa',c:'#ffffff',i:'#0b2a3a',m:'#5c7a88',a:'#0e9aa7',b:'#3b82f6',f:"'Cairo'",h:"'Cairo'",r:'22px',hr:[12,21],st:20,who:'مريض',l1:'اختار التخصص',sv:[['باطنة',300,20],['أسنان',400,30],['جلدية وتجميل',350,20],['عظام',400,20],['أطفال',300,20],['عيون',350,20],['نساء وتوليد',450,30]],x:'visit',ch:['كشف بميعاد','بدون زحمة','تذكير بالموعد'],sl:'الدكتور',stf:[['د. أحمد فؤاد','باطنة'],['د. منى الشريف','باطنة'],['د. كريم عادل','أسنان'],['د. نهى سعيد','أسنان'],['د. ياسمين حاتم','جلدية وتجميل'],['د. طارق منصور','عظام'],['د. هشام ربيع','عظام'],['د. سلمى عمر','أطفال'],['د. ماجد صلاح','عيون'],['د. هالة نبيل','نساء وتوليد'],['د. دينا فوزي','نساء وتوليد']]},
+roofing:{n:'شركة روفينج',e:'🏠',t:'سقفك في أيدٍ أمينة',s:'احجز معاينة مجانية وفريقنا يجيلك لحد البيت ويديك سعر واضح.',bg:'#12161c',c:'#1d232c',i:'#fff',m:'#9aa5b4',a:'#ff6b2c',b:'#f5b700',f:"'Tajawal'",h:"'Tajawal'",r:'3px',hr:[8,18],st:60,who:'عميل',l1:'محتاج إيه؟',sv:[['معاينة وتقدير سعر مجاني',0,60],['تركيب سقف جديد',0,60],['إصلاح تسريبات',0,60],['استبدال قرميد / شينجل',0,60],['عزل أسطح',0,60]],x:'addr',ch:['معاينة مجانية','ضمان على الشغل','أسعار واضحة']},
+cafe:{n:'الكافيه',e:'☕',t:'ركنك المفضّل مستنيك',s:'احجز ترابيزة لجلسة هادية أو لمّة صحاب.',bg:'#f5ede1',c:'#fffaf1',i:'#3a2415',m:'#8a6f5a',a:'#8c4a2b',b:'#5f7f4f',f:"'Changa'",h:"'Lalezar'",r:'26px',hr:[9,24],st:30,who:'ضيف',l1:'نوع الجلسة',sv:[['جلسة عادية',0,90],['شغل ومذاكرة',0,120],['عيد ميلاد',0,150],['اجتماع شغل',0,90]],x:'party',areas:['داخلي','تراس','ركن هادي'],ch:['واي فاي سريع','بن مختص','أماكن هادية']},
+resto:{n:'المطعم',e:'🍽️',t:'سفرة عامرة وطاولة محجوزة',s:'احجز طاولتك للعشا أو المناسبات واحنا نجهّز كل حاجة.',bg:'#1a0e11',c:'#27161a',i:'#f8ece4',m:'#b79c93',a:'#e5484d',b:'#f0a35e',f:"'Cairo'",h:"'Amiri'",r:'10px',hr:[12,24],st:30,who:'ضيف',l1:'نوع الحجز',sv:[['غدا / عشا عادي',0,90],['مناسبة خاصة',0,150],['غرفة VIP',0,150],['عشا رومانسي',0,120]],x:'party',areas:['القاعة الرئيسية','التراس','غرفة VIP'],ch:['منيو فاخر','حجز مضمون','تجهيز مناسبات']},
+salon:{n:'الصالون',e:'💅',t:'دلّعي نفسك',s:'احجزي ميعادك مع أحسن الخبيرات من غير انتظار.',bg:'#fff1f6',c:'#ffffff',i:'#3b1230',m:'#92607f',a:'#d6336c',b:'#9c36b5',f:"'Tajawal'",h:"'Lalezar'",r:'30px',hr:[10,22],st:30,who:'عميلة',l1:'اختاري الخدمة',sv:[['سشوار',200,45],['صبغة',700,120],['مانيكير وباديكير',350,75],['ميك أب',600,60],['كيراتين',1200,150]],ch:['خبيرات محترفات','منتجات أصلية','بدون انتظار'],sl:'الخبيرة',stf:[['ريم',''],['هاجر',''],['ندى','']]},
+gym:{n:'الجيم',e:'🏋️',t:'ابدأ دلوقتي',s:'احجز حصتك التجريبية أو مع مدرب شخصي.',bg:'#090d09',c:'#141a14',i:'#f1ffe0',m:'#8da184',a:'#b6ff00',b:'#00e5ff',f:"'Changa'",h:"'Changa'",r:'2px',hr:[6,23],st:60,who:'لاعب',l1:'اختار الحصة',sv:[['حصة تجريبية مجانية',0,60],['تدريب شخصي',400,60],['يوجا',200,60],['كروس فيت',250,60]],ch:['أجهزة حديثة','مدربين معتمدين','حصة أولى مجاناً'],sl:'المدرب',stf:[['كابتن مازن',''],['كابتن ليلى','يوجا'],['كابتن شريف','']]},
+wash:{n:'غسيل السيارات',e:'🚗',t:'عربيتك تلمع',s:'احجز دورك ومتستناش في الطابور.',bg:'#eaf4ff',c:'#ffffff',i:'#0b2447',m:'#58708f',a:'#0066ff',b:'#00c2a8',f:"'Cairo'",h:"'Cairo'",r:'14px',hr:[8,20],st:30,who:'عميل',l1:'اختار الخدمة',sv:[['غسيل خارجي',100,30],['غسيل شامل',200,60],['تلميع',500,90],['تنظيف مقاعد',350,90]],ch:['خدمة سريعة','مواد آمنة','دورك محفوظ']}
+};
+Object.keys(T).forEach(x=>{if(x!=='resto')delete T[x]});const DEF=JSON.parse(JSON.stringify(T));
+const HOOK='';lov();
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let AR=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];const AR0=AR.slice();
+const ST={new:['جديد','s-new'],ok:['مؤكد','s-ok'],done:['تم','s-done'],x:['ملغي','s-x']};
+let K='resto',S={sv:null,x:null,pt:2,ar:0,d:null,t:null},flt='all';
+const get=k=>{try{return JSON.parse(localStorage.getItem('mw_'+k))||[]}catch(e){return []}};
+const put=(k,v)=>{try{localStorage.setItem('mw_'+k,JSON.stringify(v))}catch(e){}};
+const mem={};const load=k=>mem[k]||(mem[k]=get(k));const save=k=>put(k,mem[k]);
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const tm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const price=v=>v?v+' ج.م':'مجاني';
+function seed(k){return;const c=T[k];if(load(k).length||get(k).length)return;
+ const nm=['أحمد سمير','منى خالد','محمود علي','سارة حسن','يوسف عادل','نورهان مجدي'],L=[];
+ nm.forEach((n,j)=>{const d=new Date();d.setDate(d.getDate()+(j%4));const s=c.sv[j%c.sv.length];
+ L.push({id:'D'+k+j,n,p:'010'+(10000000+j*1234567),nt:'',sv:s[0],pr:s[1],x:c.x==='party'?{pt:2+j,ar:c.areas[j%3]}:null,d:iso(d),t:tm(c.hr[0]*60+c.st*(j*2+1)),s:j<2?'new':'ok'})});
+ mem[k]=L;save(k)}
+function theme(){const c=T[K],r=document.documentElement.style;
+ [['--bg',c.bg],['--card',c.c],['--ink',c.i],['--mut',c.m],['--a',c.a],['--b',c.b],['--f',c.f+",system-ui,sans-serif"],['--h',c.h+",'Cairo',sans-serif"],['--r',c.r]].forEach(([k,v])=>r.setProperty(k,v));
+ document.querySelector('meta[name=theme-color]')||document.head.insertAdjacentHTML('beforeend','<meta name="theme-color">');
+ document.querySelector('meta[name=theme-color]').content=c.bg}
+function build(){const c=T[K];seed(K);theme();
+ $('pk').innerHTML=Object.keys(T).map(k=>`<button class="pk ${k===K?'on':''}" data-k="${k}">${T[k].e} ${T[k].n}</button>`).join('');
+ $('ht').textContent=c.n+' — تسجيل حجز جديد';$('hs').textContent=c.s;$('he').textContent=c.e;$('hc').innerHTML=c.ch.map(x=>`<span class="chip">✓ ${x}</span>`).join('');
+ $('l1').textContent=c.l1;
+ $('sv').innerHTML=c.sv.map((s,i)=>`<button class="op" style="--n:${i}" data-i="${i}"><b>${esc(s[0])}</b><small>${price(s[1])} • ${s[2]} دقيقة</small></button>`).join('');
+ S={sv:null,x:null,pt:2,ar:0,d:null,t:null};
+ const xs=$('xs');xs.classList.toggle('hide',!c.x);
+ if(c.x==='party'){$('l2').textContent='عدد الأفراد والمكان';$('xb').innerHTML=`<div class="step"><button data-p="1">+</button><span id="pt">2 أفراد</span><button data-p="-1">−</button></div><div class="opts" style="margin-top:10px">${c.areas.map((a,i)=>`<button class="op ${i?'':'on'}" data-ar="${i}"><b>${a}</b></button>`).join('')}</div>`}
+ else if(c.x==='addr'){$('l2').textContent='مكان المعاينة';$('xb').innerHTML='<label for="ad">العنوان / المنطقة</label><input id="ad" placeholder="مثال: سموحة، الإسكندرية">'}
+ else if(c.x==='visit'){$('l2').textContent='نوع الزيارة';$('xb').innerHTML=`<div class="opts">${['كشف جديد','إعادة / متابعة','استشارة'].map((a,i)=>`<button class="op ${i?'':'on'}" data-v="${a}"><b>${a}</b></button>`).join('')}</div>`;S.x='كشف جديد'}
+ {const o=(c.sl?1:0)+(c.x?1:0);$('n3').textContent=2+o;$('n4').textContent=3+o;document.querySelector('#xs i').textContent=2+(c.sl?1:0)}
+ staff();days();slots();tick();dash();pull(K)}
+function days(){const o=[];for(let i=0;i<14;i++){const d=new Date();d.setDate(d.getDate()+i);o.push(d)}
+ S.d=S.d||iso(o[0]);{const dp=$('dp');dp.min=iso(new Date());dp.value=o.some(d=>iso(d)===S.d)?'':S.d}
+ $('dy').innerHTML=o.map((d,i)=>`<button class="dy ${iso(d)===S.d?'on':''}" data-d="${iso(d)}"><small>${i?AR[d.getDay()]:'النهارده'}</small><b>${d.getDate()}</b></button>`).join('')}
+function slots(){const c=T[K],bs=load(K).filter(b=>b.d===S.d&&b.s!=='x'),el=elig(),taken=bs.map(b=>b.t).filter(t=>c.sl?(S.st?bs.some(b=>b.t===t&&b.st===S.st):bs.filter(b=>b.t===t).length>=Math.max(1,el.length)):true),n=new Date(),today=iso(n)===S.d,cur=n.getHours()*60+n.getMinutes(),L=[];
+ for(let m=c.hr[0]*60;m<c.hr[1]*60;m+=c.st){const t=tm(m),off=taken.includes(t)||(today&&m<cur+15);L.push(`<button class="sl ${S.t===t?'on':''}" data-t="${t}" ${off?'disabled':''}>${t}</button>`)}
+ $('sl').innerHTML=L.join('')}
+function tick(){const c=T[K],s=S.sv!==null?c.sv[S.sv]:null,r=[['الخدمة',s?s[0]:'—'],['اليوم',S.d?S.d.split('-').reverse().join('/'):'—'],['الساعة',S.t||'—']];
+ if(c.x==='party')r.push(['الأفراد',S.pt],['المكان',c.areas[S.ar]]);
+ if(c.sl)r.push([c.sl,S.st||'أي متاح']);$('th').textContent=c.e+' '+c.n;$('tr').innerHTML=r.map(x=>`<div class="row"><span>${x[0]}</span><b>${esc(x[1])}</b></div>`).join('');
+ $('tt').textContent=s?price(s[1]):''}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const D=b.dataset,c=T[K];
+ if(D.k){K=D.k;build();window.scrollTo({top:0,behavior:'smooth'});return}
+ if(D.i!==undefined){S.sv=+D.i;S.st=null;staff();slots();document.querySelectorAll('#sv .op').forEach(x=>x.classList.toggle('on',x===b));tick()}
+ if(D.p){S.pt=Math.max(1,Math.min(20,S.pt+ +D.p));$('pt').textContent=S.pt+' أفراد';tick()}
+ if(D.ar!==undefined){S.ar=+D.ar;document.querySelectorAll('[data-ar]').forEach(x=>x.classList.toggle('on',x===b));tick()}
+ if(D.v){S.x=D.v;document.querySelectorAll('[data-v]').forEach(x=>x.classList.toggle('on',x===b))}
+ if(D.stf!==undefined){S.st=D.stf||null;S.t=null;staff();slots();tick()}
+ if(D.d){S.d=D.d;S.t=null;days();slots();tick()}
+ if(D.t){S.t=D.t;slots();tick()}
+ if(D.f){flt=D.f;dash()}
+ if(D.st){const L=load(K),x=L.find(y=>y.id===D.id);if(x){x.s=D.st;save(K);dash()}}
+});
+$('go').onclick=()=>{const c=T[K];let bad=0;const nm=$('nm'),ph=$('ph');
+ [nm,ph].forEach(x=>x.classList.remove('err'));
+ if(S.sv===null){$('sv').scrollIntoView({behavior:'smooth',block:'center'});bad=1}
+ else if(!S.t){$('sl').scrollIntoView({behavior:'smooth',block:'center'});bad=1}
+ else if(nm.value.trim().length<2){nm.classList.add('err');nm.focus();bad=1}
+ else if(!/^\+?[0-9]{10,13}$/.test(ph.value.replace(/\s/g,''))){ph.classList.add('err');ph.focus();bad=1}
+ if(bad){$('go').textContent='كمّل البيانات الناقصة ⬆';setTimeout(()=>$('go').textContent='تأكيد الحجز',1800);return}
+ const s=c.sv[S.sv],id='B'+Math.random().toString(36).slice(2,6).toUpperCase();let st=S.st;if(!st&&c.sl){const bs=load(K).filter(b=>b.d===S.d&&b.s!=='x'&&b.t===S.t);st=(elig().find(f=>!bs.some(b=>b.st===f[0]))||[''])[0]}
+ const x=c.x==='party'?{pt:S.pt,ar:c.areas[S.ar]}:c.x==='addr'?{ad:$('ad').value.trim()}:c.x==='visit'?{v:S.x}:null;
+ load(K).push({id,n:nm.value.trim(),p:ph.value.trim(),nt:$('nt').value.trim(),sv:s[0],pr:s[1],x,d:S.d,t:S.t,st:st||'',ts:Date.now(),s:'new'});save(K);hook(load(K)[load(K).length-1]);
+ $('cd').textContent=id;
+ $('mt').textContent=`${nm.value.trim()} — حجز لـ ${s[0]} يوم ${S.d.split('-').reverse().join('/')} الساعة ${S.t} اتسجّل. وقت التسجيل: ${fts(Date.now())}`;
+ $('wa').href='https://wa.me/'+((p=>p.startsWith('0')?'20'+p.slice(1):p.replace('+',''))(ph.value.replace(/\s/g,'')))+'?text='+encodeURIComponent(`حجز ${c.n} — كود ${id}\n${s[0]}\n${S.d} ${S.t}\n${nm.value.trim()}`);
+ $('md').classList.add('on');
+ for(let i=0;i<40;i++){const f=document.createElement('div');f.className='cf';f.textContent=['🎉','✨',c.e,'🎊'][i%4];f.style.left=Math.random()*100+'vw';f.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(f);setTimeout(()=>f.remove(),3500)}
+ nm.value=ph.value=$('nt').value='';$('ph2').textContent='';S.t=null;slots();tick();dash()};
+$('mc').onclick=()=>$('md').classList.remove('on');
+function dash(){const c=T[K],L=load(K),td=iso(new Date()),act=L.filter(b=>b.s!=='x');
+ $('dh').textContent=`${c.e} لوحة تحكم ${c.n}`;
+ $('ds').innerHTML=[['كل الحجوزات',L.length],['حجوزات النهارده',act.filter(b=>b.d===td).length],['محتاجة تأكيد',L.filter(b=>b.s==='new').length],c.sv.some(s=>s[1])?['إيراد متوقع',act.reduce((a,b)=>a+b.pr,0)+' ج.م']:['إجمالي '+(c.x==='party'?'الأفراد':c.who+'ين'),c.x==='party'?act.reduce((a,b)=>a+(b.x?b.x.pt:0),0):act.length]].map(s=>`<div class="card st"><small>${s[0]}</small><b>${s[1]}</b></div>`).join('');
+ const cnt=[],mx=[];for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()+i);cnt.push([i?AR[d.getDay()]:'النهارده',act.filter(b=>b.d===iso(d)).length])}
+ const m=Math.max(1,...cnt.map(x=>x[1]));
+ $('db').innerHTML=cnt.map(x=>`<div class="bar"><i style="height:${x[1]/m*90}px"></i>${x[1]}<br>${x[0]}</div>`).join('');
+ $('df').innerHTML=[['all','الكل'],['today','النهارده'],['new','جديد'],['ok','مؤكد'],['done','تم'],['x','ملغي']].map(f=>`<button class="${flt===f[0]?'on':''}" data-f="${f[0]}">${f[1]}</button>`).join('');
+ const V=L.filter(b=>(flt==='all'||(flt==='today'?b.d===td:b.s===flt))&&(!$('sq').value||(b.n+b.p).includes($('sq').value)||(np($('sq').value)&&np(b.p).includes(np($('sq').value))))).sort((a,b)=>(a.d+a.t).localeCompare(b.d+b.t));
+ $('dl').innerHTML=V.length?V.map(b=>{const x=b.x||{},ex=x.pt?` • ${x.pt} أفراد • ${esc(x.ar)}`:x.ad?` • ${esc(x.ad)}`:x.v?` • ${esc(x.v)}`:'';
+ return `<div class="card bk"><div><h5>${esc(b.n)}<span class="tag ${ST[b.s][1]}">${ST[b.s][0]}</span></h5><p>${esc(b.sv)}${b.st?' • '+esc(b.st):''}${ex}</p><p>📅 ${b.d.split('-').reverse().join('/')} ⏰ ${b.t} 📞 <span dir="ltr">${esc(b.p)}</span></p>${b.ts?`<p>🕒 اتسجّل ${fts(b.ts)}</p>`:''}${b.nt?`<p>📝 ${esc(b.nt)}</p>`:''}</div>
+ <div class="acts">${b.s==='new'?`<button data-id="${b.id}" data-st="ok">✔ تأكيد</button>`:''}${b.s==='ok'?`<button data-id="${b.id}" data-st="done">✓ تم</button>`:''}${b.s!=='x'&&b.s!=='done'?`<button data-id="${b.id}" data-st="x">✖ إلغاء</button>`:''}<a target="_blank" rel="noopener" href="tel:${esc(b.p)}">اتصال</a></div></div>`}).join(''):`<div class="empty">مفيش حجوزات هنا لسه. أول حجز هيظهر فورًا.</div>`}
+$('ex').onclick=()=>{const L=load(K),q=v=>'"'+String(v).replace(/"/g,'""')+'"',r=[['الكود','الاسم','الموبايل','الخدمة','التاريخ','الساعة','الحالة','ملاحظات','وقت التسجيل'].map(q).join(',')].concat(L.map(b=>[b.id,b.n,b.p,b.sv,b.d,b.t,ST[b.s][0],b.nt,b.ts?fts(b.ts):''].map(q).join(',')));
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+r.join('\n')],{type:'text/csv'}));a.download='bookings-'+K+'.csv';a.click()};
+$('rs').onclick=()=>{if(confirm(tr('تمسح كل حجوزات '+T[K].n+'؟'))){mem[K]=[];save(K);dash();slots()}};
+let ADM=true,PN='bk';
+const PW=()=>{try{return localStorage.getItem('mw_pw')||'admin123'}catch(e){return 'admin123'}};
+function sc(k=K){const c=T[k];try{localStorage.setItem('mw_cfg_'+k,JSON.stringify({sv:c.sv,stf:c.stf,a:c.a,b:c.b,bg:c.bg,c:c.c,i:c.i,m:c.m,r:c.r}))}catch(e){}}
+function view(d){$('vb').classList.toggle('hide',!!d);$('vd').classList.toggle('hide',!d);$('tb').classList.toggle('on',!d);$('td').classList.toggle('on',!!d);if(d)panel(PN);else build()}
+function panel(p){PN=p;const c=T[K];
+ $('dn').innerHTML=[['bk','📋 الحجوزات'],['sv','🛎 الخدمات والأسعار'],...(c.sl?[['st','👤 الفريق']]:[]),['th','🎨 الألوان'],['cu','👥 العملاء'],['dt','💾 البيانات']].map(x=>`<button class="${p===x[0]?'on':''}" data-pn="${x[0]}">${x[1]}</button>`).join('');
+ $('pbk').classList.toggle('hide',p!=='bk');$('px').classList.toggle('hide',p==='bk');
+ if(p==='bk'){dash();return}
+ if(p==='sv')$('px').innerHTML=`<div class="card"><h3>خدمات ${c.n} وأسعارها</h3><div class="ed hd"><small>اسم الخدمة</small><small>السعر (ج.م)</small><small>المدة (دقيقة)</small><span></span></div>${c.sv.map((s,i)=>`<div class="ed"><input data-sf="0" data-ix="${i}" value="${esc(s[0])}" aria-label="اسم الخدمة"><input type="number" min="0" data-sf="1" data-ix="${i}" value="${s[1]}" aria-label="السعر"><input type="number" min="5" step="5" data-sf="2" data-ix="${i}" value="${s[2]}" aria-label="المدة"><button class="del" data-sd="${i}" aria-label="حذف">🗑</button></div>`).join('')}<button class="go" data-sa="1" style="margin-top:12px">＋ إضافة خدمة</button><p class="note">السعر 0 يظهر "مجاني". كل تعديل بيتحفظ وبيظهر في صفحة الحجز.</p><div class="acts" style="margin-top:10px"><button data-rsv="1">↺ رجّع الخدمات الأصلية</button></div></div>`;
+ if(p==='st')$('px').innerHTML=`<div class="card"><h3>👤 فريق ${c.n}</h3><p class="note">اربط كل شخص بخدمة معينة (مثلًا الدكتور بتخصصه) أو سيبه على "كل الخدمات". العميل بيختار منهم وقت الحجز.</p>${(c.stf||[]).map((s,i)=>`<div class="ed" style="grid-template-columns:2fr 2fr auto"><input data-tn="1" data-ix="${i}" value="${esc(s[0])}" aria-label="الاسم"><select data-ts="1" data-ix="${i}" aria-label="الخدمة"><option value="">كل الخدمات</option>${c.sv.map(v=>`<option value="${esc(v[0])}" ${v[0]===s[1]?'selected':''}>${esc(v[0])}</option>`).join('')}</select><button class="del" data-xd="${i}" aria-label="حذف">🗑</button></div>`).join('')}<button class="go" data-xa="1" style="margin-top:12px">＋ إضافة</button></div>`;
+ if(p==='cu'){$('px').innerHTML=`<div class="card"><h3>👥 عملاء ${c.n}</h3><p class="note">العميل بيتتعرّف عليه برقم الموبايل مش بالاسم، فلو نفس الرقم اتسجّل بأكتر من اسم بيتجمّعوا في بطاقة واحدة.</p><input id="cq" oninput="cust()" placeholder="🔍 رقم الموبايل أو الاسم" style="margin:12px 0"><div id="cl"></div></div>`;cust();return}
+ if(p==='dt')$('px').innerHTML=`<div class="card"><h3>💾 نسخ احتياطي ونشر الإعدادات</h3><div class="acts" style="justify-content:flex-start"><button data-ej="1">⬇ تصدير JSON</button><button data-im="1">⬆ استيراد JSON</button></div><input id="imf" type="file" accept=".json,application/json" hidden><p class="note" id="dm"></p><p class="note">التصدير بيشمل حجوزات وخدمات وفريق وألوان كل المشاريع. عشان الزباين يشوفوا إعداداتك على GitHub: ارفع الملف باسم <b dir="ltr">config-resto.json</b> جنب الصفحة.</p><p style="margin-top:14px">ربط Google Sheet: <b>${HOOK?'✅ مربوط':'❌ مش مربوط'}</b></p><div class="acts" style="justify-content:flex-start;margin-top:8px"><button data-pull="1">⟳ سحب الحجوزات من الشيت</button></div></div>`;
+ if(p==='th'){const F=[['a','اللون الرئيسي'],['b','اللون الثانوي'],['bg','الخلفية'],['c','الكروت'],['i','لون الخط'],['m','الخط الباهت']];
+ $('px').innerHTML=`<div class="card"><h3>ألوان ${c.n}</h3><p class="note">التغيير بيتطبق لحظيًا على الصفحة كلها.</p><div class="cg">${F.map(f=>`<div><label>${f[1]}</label><input type="color" data-cf="${f[0]}" value="${c[f[0]]}"></div>`).join('')}<div><label>استدارة الأركان</label><input type="range" min="0" max="34" data-rad="1" value="${parseInt(c.r)}"></div></div><button class="go" data-rc="1" style="margin-top:18px">↺ رجّع ألوان ${c.n} الأصلية</button></div>`}
+ if(p==='sec')$('px').innerHTML=`<div class="card" style="max-width:440px"><h3>تغيير كلمة السر</h3><label style="margin-top:10px">الكلمة الحالية</label><input id="p0" type="password" autocomplete="current-password"><label style="margin-top:10px">الكلمة الجديدة (٤ حروف على الأقل)</label><input id="p1" type="password" autocomplete="new-password"><button class="go" data-sp="1" style="margin-top:14px">حفظ</button><p class="note" id="pm"></p><p class="note">تنبيه: الحماية دي على مستوى المتصفح فقط. للتشغيل الحقيقي لازم تسجيل دخول على سيرفر.</p></div>`}
+const np=p=>{let d=String(p||'').replace(/\D/g,'');if(d.startsWith('0020'))d=d.slice(4);else if(d.startsWith('20')&&d.length>=12)d=d.slice(2);if(d.length===10&&d[0]!=='0')d='0'+d;return d};
+const fd=d=>d.split('-').reverse().join('/')+' ('+AR[new Date(d+'T12:00').getDay()]+')';
+let OPN='';
+function known(){const v=np($('ph').value),el=$('ph2');el.textContent='';if(v.length<8)return;const a=load(K).filter(b=>np(b.p)===v).sort((x,y)=>(y.d+y.t).localeCompare(x.d+x.t));if(!a.length){el.textContent='🆕 عميل جديد';return}const td=iso(new Date()),l=a.find(b=>b.s==='done')||a.find(b=>b.s!=='x'&&b.d<=td);el.textContent='👤 عميل قديم: '+a[0].n+' • '+a.length+' حجز'+(l?' • آخر زيارة '+fd(l.d):'');if(!$('nm').value.trim())$('nm').value=a[0].n}
+function cust(){const L=load(K),td=iso(new Date()),q=($('cq').value||'').trim(),qd=np(q),M={};
+ L.forEach(b=>{const k=np(b.p)||String(b.p);(M[k]=M[k]||[]).push(b)});
+ const R=Object.keys(M).map(k=>{const a=M[k].slice().sort((x,y)=>(y.d+y.t).localeCompare(x.d+x.t)),nm=[...new Set(a.map(b=>b.n))],live=a.filter(b=>b.s!=='x');return{k,a,nm,n:live.length,x:a.length-live.length,dn:a.find(b=>b.s==='done'),past:live.find(b=>b.d<=td),nx:live.filter(b=>b.d>td).pop(),sp:a.filter(b=>b.s==='done').reduce((s,b)=>s+b.pr,0)}})
+ .filter(r=>!q||(qd&&r.k.includes(qd))||r.nm.some(n=>n.includes(q))).sort((a,b)=>(b.a[0].d+b.a[0].t).localeCompare(a.a[0].d+a.a[0].t));
+ $('cl').innerHTML=R.length?R.map(r=>{const l=r.dn?'آخر زيارة: '+fd(r.dn.d):r.past?'آخر حجز فات: '+fd(r.past.d):'لسه ماجاش';
+ return `<div class="card bk" style="grid-template-columns:1fr"><div><h5>${esc(r.nm[0])}${r.nm.length>1?`<span class="tag" style="background:#d97706">${r.nm.length} أسماء</span>`:''}</h5><p dir="ltr" style="text-align:right">📞 ${esc(r.k)}</p>${r.nm.length>1?`<p>مسجّل بأسماء: ${r.nm.map(esc).join('، ')}</p>`:''}<p>🔢 ${r.n} حجز${r.x?' ('+r.x+' ملغي)':''} • 🕘 ${l}${r.nx?' • ⏭ الجاي: '+fd(r.nx.d)+' '+r.nx.t:''}${r.sp?' • 💰 '+r.sp+' ج.م':''}</p><div class="acts" style="justify-content:flex-start;margin-top:8px"><button data-cu="${esc(r.k)}">${OPN===r.k?'إخفاء السجل':'📜 السجل الكامل'}</button><a href="tel:${esc(r.k)}">اتصال</a></div>${OPN===r.k?`<div style="margin-top:10px;border-top:1px dashed var(--ln);padding-top:8px">${r.a.map(b=>`<p>${fd(b.d)} ⏰ ${b.t} • ${esc(b.sv)}${b.st?' • '+esc(b.st):''} • ${esc(b.n)} <span class="tag ${ST[b.s][1]}">${ST[b.s][0]}</span></p>`).join('')}</div>`:''}</div></div>`}).join(''):'<div class="empty">مفيش عملاء مطابقين.</div>'}
+const fts=t=>{const d=new Date(t),h=d.getHours();return AR[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+(EN?' at ':' الساعة ')+((h%12)||12)+':'+String(d.getMinutes()).padStart(2,'0')+(h<12?(EN?' AM':' ص'):(EN?' PM':' م'))};
+const elig=()=>{const c=T[K];return(c.stf||[]).filter(s=>!s[1]||(S.sv!==null&&c.sv[S.sv]&&c.sv[S.sv][0]===s[1]))};
+function staff(){const c=T[K];$('ss').classList.toggle('hide',!c.sl);if(!c.sl)return;$('ls').textContent='اختار '+c.sl;
+ $('sb').innerHTML=S.sv===null?'<p class="note">اختار الخدمة الأول.</p>':`<button class="op ${S.st?'':'on'}" data-stf=""><b>أي متاح</b><small>أقرب ميعاد</small></button>`+elig().map(s=>`<button class="op ${S.st===s[0]?'on':''}" data-stf="${esc(s[0])}"><b>${esc(s[0])}</b></button>`).join('')}
+function applyCfg(k,o){const c=T[k];if(!o||typeof o!=='object')return;
+ if(Array.isArray(o.sv)&&o.sv.length)c.sv=o.sv.filter(Array.isArray).map(s=>[String(s[0]).slice(0,60),Math.max(0,+s[1]||0),Math.max(5,+s[2]||30)]);
+ if(Array.isArray(o.stf)&&c.sl)c.stf=o.stf.filter(Array.isArray).map(s=>[String(s[0]).slice(0,40),String(s[1]||'')]);
+ ['a','b','bg','c','i','m'].forEach(f=>{if(/^#[0-9a-f]{6}$/i.test(o[f]))c[f]=o[f]});if(/^\d{1,2}px$/.test(o.r))c.r=o.r}
+function lov(){Object.keys(T).forEach(k=>{try{applyCfg(k,JSON.parse(localStorage.getItem('mw_cfg_'+k)))}catch(e){}})}
+function hook(b){if(HOOK)fetch(HOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({k:K},b))}).catch(()=>{})}
+function pull(k,cb){if(!HOOK)return;fetch(HOOK+(HOOK.includes('?')?'&':'?')+'k='+k).then(r=>r.json()).then(a=>{if(!Array.isArray(a))return;const m=load(k);let n=0;a.forEach(b=>{if(b&&b.id&&!m.some(y=>y.id===String(b.id))){n++;m.push({id:String(b.id),n:String(b.n||''),p:String(b.p||''),nt:String(b.nt||''),sv:String(b.sv||''),pr:+b.pr||0,x:b.x&&typeof b.x==='object'?b.x:null,d:String(b.d||''),t:String(b.t||''),st:String(b.st||''),s:ST[b.s]?b.s:'new'})}});save(k);if(k===K){slots();dash()}if(cb)cb(n)}).catch(()=>{if(cb)cb(-1)})}
+fetch('config-resto.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.d){Object.keys(j.d).forEach(k=>T[k]&&applyCfg(k,j.d[k].cfg));lov();build()}}).catch(()=>{});
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!ADM)return;const q=b.dataset,c=T[K];
+ if(q.cu!==undefined){OPN=OPN===q.cu?'':q.cu;cust()}
+ if(q.xa){c.stf.push(['اسم جديد','']);sc();panel('st')}
+ if(q.xd!==undefined){c.stf.splice(+q.xd,1);sc();panel('st')}
+ if(q.im)$('imf').click();
+ if(q.pull)pull(K,n=>{$('dm').textContent=n<0?'تعذّر الاتصال بالشيت.':'✓ اتضاف '+n+' حجز جديد.'});
+ if(q.ej){const o={v:1,d:{}};Object.keys(T).forEach(k=>{const x=T[k];o.d[k]={bk:load(k),cfg:{sv:x.sv,stf:x.stf,a:x.a,b:x.b,bg:x.bg,c:x.c,i:x.i,m:x.m,r:x.r}}});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:'application/json'}));a.download='mawaid-backup-'+iso(new Date())+'.json';a.click()}});
+document.addEventListener('change',e=>{if(e.target.id!=='imf'||!ADM)return;const f=e.target.files[0];if(!f)return;
+ f.text().then(tx=>{let n=0;try{const j=JSON.parse(tx);Object.keys(j.d).forEach(k=>{if(!T[k])return;const v=j.d[k],m=load(k);(Array.isArray(v.bk)?v.bk:[]).forEach(b=>{if(b&&typeof b.id==='string'&&typeof b.n==='string'){const i=m.findIndex(y=>y.id===b.id);if(i<0)m.push(b);else m[i]=b;n++}});save(k);applyCfg(k,v.cfg);sc(k)});theme();panel('dt');$('dm').textContent='✓ تم الاستيراد ('+n+' حجز).'}catch(x){$('dm').textContent='الملف مش صالح.'}})});
+$('tb').onclick=()=>view(0);
+$('td').onclick=()=>{if(ADM)view(1);else{$('pw').value='';$('pe').textContent='';$('lg').classList.add('on');setTimeout(()=>$('pw').focus(),60)}};
+const tryLogin=()=>{if($('pw').value===PW()){ADM=true;$('lg').classList.remove('on');view(1)}else $('pe').textContent='كلمة السر غلط. جرّب تاني.'};
+$('lo').onclick=tryLogin;$('pw').onkeydown=e=>{if(e.key==='Enter')tryLogin()};$('lc').onclick=()=>$('lg').classList.remove('on');
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!ADM)return;const q=b.dataset,c=T[K];
+ if(q.pn){if(q.pn==='out'){ADM=false;view(0)}else panel(q.pn)}
+ if(q.sa){c.sv.push(['خدمة جديدة',0,30]);sc();panel('sv')}
+ if(q.sd!==undefined&&c.sv.length>1){const g=c.sv.splice(+q.sd,1)[0][0];(c.stf||[]).forEach(f=>{if(f[1]===g)f[1]=''});sc();panel('sv')}
+ if(q.rsv){c.sv=JSON.parse(JSON.stringify(DEF[K].sv));sc();panel('sv')}
+ if(q.rc){['a','b','bg','c','i','m','r'].forEach(f=>c[f]=DEF[K][f]);sc();theme();panel('th')}
+ if(q.sp){const n=$('p1').value;if($('p0').value!==PW())$('pm').textContent='الكلمة الحالية غلط.';else if(n.length<4)$('pm').textContent='الكلمة الجديدة قصيرة.';else{try{localStorage.setItem('mw_pw',n);$('pm').textContent='✓ اتحفظت.'}catch(x){$('pm').textContent='المتصفح منع الحفظ.'}}}});
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset,c=T[K];if(!ADM)return;
+ if(d.sf!==undefined){const s=c.sv[+d.ix];if(d.sf==='0'&&c.stf)c.stf.forEach(f=>{if(f[1]===s[0])f[1]=t.value});s[+d.sf]=d.sf==='0'?t.value:Math.max(0,+t.value||0);sc()}
+ if(d.tn)c.stf[+d.ix][0]=t.value,sc();
+ if(d.ts)c.stf[+d.ix][1]=t.value,sc();
+ if(d.cf){c[d.cf]=t.value;sc();theme()}
+ if(d.rad){c.r=t.value+'px';sc();theme()}});
+let EN=false;const TT=document.title;
+const RAW=`=✦ موعد|✦ Mawaid
+=موعد — حجز مواعيد لأي نشاط|Mawaid — Appointment booking for any business
+=➕ حجز جديد|➕ New booking
+=📊 الحجوزات والإدارة|📊 Bookings & admin
+حجز المواعيد|Appointment booking
+الحلاقة|Barbershop
+العيادة|Clinic
+شركة روفينج|Roofing Co.
+الكافيه|Café
+المطعم|Restaurant
+الصالون|Salon
+الجيم|Gym
+غسيل السيارات|Car Wash
+ — تسجيل حجز جديد| — New booking
+=قصّة شعر|Haircut
+=دقن وتحديد|Beard trim & lining
+=قصّة + دقن|Haircut + beard
+=حلاقة ملكية بالفوطة الساخنة|Royal hot-towel shave
+=تنظيف بشرة|Facial cleanup
+=باطنة|Internal medicine
+=أسنان|Dentistry
+=جلدية وتجميل|Dermatology & cosmetic
+=عظام|Orthopedics
+=أطفال|Pediatrics
+=عيون|Ophthalmology
+=نساء وتوليد|Ob/Gyn
+=معاينة وتقدير سعر مجاني|Free inspection & quote
+=تركيب سقف جديد|New roof installation
+=إصلاح تسريبات|Leak repair
+=استبدال قرميد / شينجل|Tile / shingle replacement
+=عزل أسطح|Roof waterproofing
+=جلسة عادية|Regular seating
+=شغل ومذاكرة|Work & study
+=عيد ميلاد|Birthday
+=اجتماع شغل|Business meeting
+=غدا / عشا عادي|Regular lunch / dinner
+=مناسبة خاصة|Special occasion
+=غرفة VIP|VIP room
+=عشا رومانسي|Romantic dinner
+=سشوار|Blow-dry
+=صبغة|Hair color
+=مانيكير وباديكير|Manicure & pedicure
+=ميك أب|Makeup
+=كيراتين|Keratin
+=حصة تجريبية مجانية|Free trial session
+=تدريب شخصي|Personal training
+=يوجا|Yoga
+=كروس فيت|CrossFit
+=غسيل خارجي|Exterior wash
+=غسيل شامل|Full wash
+=تلميع|Polishing
+=تنظيف مقاعد|Seat cleaning
+=داخلي|Indoor
+=تراس|Terrace
+=ركن هادي|Quiet corner
+=القاعة الرئيسية|Main hall
+=كشف جديد|New visit
+=إعادة / متابعة|Follow-up
+=استشارة|Consultation
+=أسطى مصطفى|Osta Mostafa
+=حسام|Hossam
+=كابتن رامي|Captain Ramy
+=د. أحمد فؤاد|Dr. Ahmed Fouad
+=د. منى الشريف|Dr. Mona El-Sherif
+=د. كريم عادل|Dr. Karim Adel
+=د. نهى سعيد|Dr. Noha Saeed
+=د. ياسمين حاتم|Dr. Yasmine Hatem
+=د. طارق منصور|Dr. Tarek Mansour
+=د. هشام ربيع|Dr. Hesham Rabie
+=د. سلمى عمر|Dr. Salma Omar
+=د. ماجد صلاح|Dr. Maged Salah
+=د. هالة نبيل|Dr. Hala Nabil
+=د. دينا فوزي|Dr. Dina Fawzy
+=ريم|Reem
+=هاجر|Hagar
+=ندى|Nada
+=كابتن مازن|Captain Mazen
+=كابتن ليلى|Captain Laila
+=كابتن شريف|Captain Sherif
+=الحلاق|Barber
+=الدكتور|Doctor
+=الخبيرة|Stylist
+=المدرب|Trainer
+=اختار الخدمة|Choose a service
+=اختار التخصص|Choose a specialty
+=محتاج إيه؟|What do you need?
+=نوع الجلسة|Session type
+=نوع الحجز|Booking type
+=اختاري الخدمة|Choose a service
+=اختار الحصة|Choose a class
+=اختار الحلاق|Choose a barber
+=اختار الدكتور|Choose a doctor
+=اختار الخبيرة|Choose a stylist
+=اختار المدرب|Choose a trainer
+=عدد الأفراد والمكان|Guests & seating
+=مكان المعاينة|Inspection location
+=نوع الزيارة|Visit type
+=اختار اليوم والميعاد|Pick a day & time
+=بيانات العميل|Customer details
+=الاسم|Name
+=رقم الموبايل|Mobile number
+=ملاحظات (اختياري)|Notes (optional)
+=تأكيد الحجز|Confirm booking
+=العنوان / المنطقة|Address / area
+=النهارده|Today
+=الخدمة|Service
+=اليوم|Date
+=الساعة|Time
+=الأفراد|Guests
+=المكان|Area
+=أي متاح|Any available
+=أقرب ميعاد|Earliest slot
+=اختار الخدمة الأول.|Choose a service first.
+=تمام|OK
+=الكل|All
+=جديد|New
+=مؤكد|Confirmed
+=تم|Done
+=ملغي|Cancelled
+=اتصال|Call
+=✔ تأكيد|✔ Confirm
+=✓ تم|✓ Done
+=✖ إلغاء|✖ Cancel
+=＋ إضافة|＋ Add
+=اسم جديد|New name
+=كمّل البيانات الناقصة ⬆|Please complete the missing info ⬆
+=إجمالي الأفراد|Total guests
+=إجمالي عميلين|Total customers
+=إجمالي عميلةين|Total customers
+=إجمالي ضيفين|Total guests
+=إجمالي لاعبين|Total members
+=إجمالي مريضين|Total patients
+=كل الحجوزات|All bookings
+=حجوزات النهارده|Today’s bookings
+=محتاجة تأكيد|Needs confirmation
+=إيراد متوقع|Expected revenue
+=الحجوزات آخر ٧ أيام قدام|Bookings — next 7 days
+=📋 الحجوزات|📋 Bookings
+=🛎 الخدمات والأسعار|🛎 Services & prices
+=👤 الفريق|👤 Team
+=🎨 الألوان|🎨 Colors
+=👥 العملاء|👥 Customers
+=💾 البيانات|💾 Data
+=⬇ تصدير CSV|⬇ Export CSV
+=🗑 مسح الحجوزات|🗑 Clear bookings
+=اللون الرئيسي|Primary color
+=اللون الثانوي|Secondary color
+=الخلفية|Background
+=الكروت|Cards
+=لون الخط|Text color
+=الخط الباهت|Muted text
+=استدارة الأركان|Corner radius
+=اسم الخدمة|Service name
+=السعر (ج.م)|Price (EGP)
+=المدة (دقيقة)|Duration (min)
+=＋ إضافة خدمة|＋ Add service
+=↺ رجّع الخدمات الأصلية|↺ Restore default services
+=⬇ تصدير JSON|⬇ Export JSON
+=⬆ استيراد JSON|⬆ Import JSON
+=📲 ابعت تأكيد للعميل|📲 Send confirmation to customer
+تم الحجز بنجاح|Booking confirmed
+مفيش حجوزات هنا لسه. أول حجز هيظهر فورًا.|No bookings yet. The first one will show up here instantly.
+عايز تاريخ أبعد؟ اختاره من التقويم|Need a later date? Pick from the calendar
+أي تفصيلة عايزنا نعرفها|Anything we should know
+مثال: سموحة، الإسكندرية|e.g. Smouha, Alexandria
+اسم العميل|Customer name
+دوّر بالاسم أو رقم الموبايل|Search by name or mobile
+دوّر بالاسم أو الموبايل|Search by name or mobile
+رقم الموبايل أو الاسم|Mobile number or name
+لوحة تحكم |Dashboard — 
+خدمات |Services: 
+ وأسعارها|
+فريق |Team: 
+ألوان |Colors: 
+عملاء |Customers: 
+↺ رجّع ألوان |↺ Restore 
+ الأصلية| default colors
+التغيير بيتطبق لحظيًا على الصفحة كلها.|Changes apply instantly across the whole page.
+السعر 0 يظهر|Price 0 shows as
+كل تعديل بيتحفظ وبيظهر في صفحة الحجز.|Every change is saved and shows on the booking page.
+اربط كل شخص بخدمة معينة|Link each person to a specific service
+(مثلًا الدكتور بتخصصه) أو سيبه على|(e.g. a doctor to their specialty) or leave on
+العميل بيختار منهم وقت الحجز.|The customer picks from them when booking.
+كل الخدمات|All services
+العميل بيتتعرّف عليه برقم الموبايل مش بالاسم، فلو نفس الرقم اتسجّل بأكتر من اسم بيتجمّعوا في بطاقة واحدة.|Customers are identified by mobile number, not name — if the same number was saved under several names, they are merged into one card.
+🆕 عميل جديد|🆕 New customer
+👤 عميل قديم: |👤 Returning customer: 
+آخر زيارة: |Last visit: 
+آخر حجز فات: |Last past booking: 
+آخر زيارة|Last visit
+لسه ماجاش|Hasn’t visited yet
+⏭ الجاي: |⏭ Next: 
+📜 السجل الكامل|📜 Full history
+إخفاء السجل|Hide history
+مسجّل بأسماء: |Registered under: 
+مفيش عملاء مطابقين.|No matching customers.
+💾 نسخ احتياطي ونشر الإعدادات|💾 Backup & publish settings
+التصدير بيشمل حجوزات وخدمات وفريق وألوان كل المشاريع.|Export includes bookings, services, team and colors of all projects.
+عشان الزباين يشوفوا إعداداتك على GitHub: ارفع الملف باسم|To show your settings to customers on GitHub, upload a file named
+ جنب الصفحة.| next to the page.
+ربط Google Sheet: |Google Sheet link: 
+✅ مربوط|✅ Connected
+❌ مش مربوط|❌ Not connected
+⟳ سحب الحجوزات من الشيت|⟳ Pull bookings from the sheet
+تعذّر الاتصال بالشيت.|Couldn’t reach the sheet.
+✓ اتضاف|✓ Added
+جديد.|new.
+✓ تم الاستيراد (|✓ Imported (
+الملف مش صالح.|Invalid file.
+تمسح كل حجوزات |Delete all bookings for 
+ — حجز لـ | — booking for 
+ يوم | on 
+ الساعة | at 
+ اتسجّل. وقت التسجيل: | is booked. Recorded: 
+اتسجّل|Logged
+مجاني|Free
+وقت التسجيل|Recorded
+؟|?`;
+const EXA={},PAR=[];RAW.split('\n').forEach(l=>{if(!l)return;const e=l[0]==='=',p=l.slice(e?1:0).split('|');if(e)EXA[p[0]]=p[1];else PAR.push([p[0],p[1]])});PAR.sort((x,y)=>y[0].length-x[0].length);
+const RX=[[/(\d+) حجز/g,'$1 bookings'],[/(\d+) ملغي/g,'$1 cancelled'],[/(\d+) أسماء/g,'$1 names'],[/(\d+) أفراد/g,'$1 guests'],[/(\d+) دقيقة/g,'$1 min'],[/ج\.م/g,'EGP']];
+function tr(s){s=String(s);if(!EN)return s;const t=s.trim();if(t in EXA)return s.replace(t,EXA[t]);let r=s;PAR.forEach(p=>{if(r.includes(p[0]))r=r.split(p[0]).join(p[1])});RX.forEach(x=>{r=r.replace(x[0],x[1])});return r}
+function walk(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode())L.push(n);
+ L.forEach(n=>{if(/^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName))return;if(n.__ar===undefined){if(!EN)return;n.__ar=n.nodeValue}const v=EN?tr(n.__ar):n.__ar;if(n.nodeValue!==v)n.nodeValue=v});
+ root.querySelectorAll('[placeholder],[aria-label]').forEach(el=>['placeholder','aria-label'].forEach(a=>{if(!el.hasAttribute(a)||el.id==='lsw')return;const k='ar'+a.replace('-','');if(el.dataset[k]===undefined){if(!EN)return;el.dataset[k]=el.getAttribute(a)}el.setAttribute(a,EN?tr(el.dataset[k]):el.dataset[k])}))}
+const mo=new MutationObserver(()=>{mo.disconnect();walk(document.body);mo.observe(document.body,{childList:true,subtree:true})});
+function setLang(en){EN=en;try{localStorage.setItem('mw_lang',en?'en':'ar')}catch(e){}
+ const h=document.documentElement;h.lang=en?'en':'ar';h.dir=en?'ltr':'rtl';AR=en?['Sun','Mon','Tue','Wed','Thu','Fri','Sat']:AR0;
+ mo.disconnect();$('lsw').textContent=en?'عربي':'EN';days();staff();tick();dash();if(!$('vd').classList.contains('hide'))panel(PN);
+ document.title=en?tr(TT):TT;walk(document.body);if(en)mo.observe(document.body,{childList:true,subtree:true})}
+$('lsw').onclick=()=>setLang(!EN);
+build();
+try{if(localStorage.getItem('mw_lang')==='en')setLang(true)}catch(e){}
+</script>
+</body>
+</html>
